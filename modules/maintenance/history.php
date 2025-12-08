@@ -10,6 +10,11 @@ require_once '../../includes/notification_helper.php';
 
 checkRole(['admin', 'manajemen']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // 🔍 Ambil filter dari query string
 $tanggal_filter = $_GET['tanggal'] ?? '';
 $aset_filter = $_GET['aset'] ?? '';
@@ -40,6 +45,40 @@ if ($aset_filter !== '') {
 }
 
 $query .= " ORDER BY mh.tanggal_perawatan DESC";
+
+// Count total records for pagination
+$count_query = "
+    SELECT COUNT(*) AS total
+    FROM maintenance_history mh
+    LEFT JOIN assets a ON mh.id_aset = a.id_aset
+    WHERE 1=1
+";
+
+$count_params = [];
+$count_types = '';
+
+if ($tanggal_filter !== '') {
+    $count_query .= " AND DATE(mh.tanggal_perawatan) = ? ";
+    $count_params[] = $tanggal_filter;
+    $count_types .= 's';
+}
+
+if ($aset_filter !== '') {
+    $count_query .= " AND a.nama_aset LIKE ? ";
+    $count_params[] = "%$aset_filter%";
+    $count_types .= 's';
+}
+
+$count_stmt = $conn->prepare($count_query);
+if (!empty($count_params)) {
+    $count_stmt->bind_param($count_types, ...$count_params);
+}
+$count_stmt->execute();
+$total_records = $count_stmt->get_result()->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Add LIMIT and OFFSET to main query
+$query .= " LIMIT $limit OFFSET $offset";
 
 $stmt = $conn->prepare($query);
 if (!empty($params)) {

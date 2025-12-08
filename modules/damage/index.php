@@ -10,6 +10,11 @@ require_once '../../includes/notification_helper.php';
 
 checkRole(['admin', 'manajemen']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // --- FILTER ---
 $status_filter = $_GET['status'] ?? '';
 $asset_filter = $_GET['id_aset'] ?? '';
@@ -31,6 +36,30 @@ if (!empty($asset_filter)) {
 }
 
 $query .= " ORDER BY dr.tanggal_lapor DESC";
+
+// Count total records for pagination
+$count_query = "
+  SELECT COUNT(*) AS total
+  FROM damage_reports dr
+  LEFT JOIN assets a ON dr.id_aset = a.id_aset
+  LEFT JOIN users u ON dr.id_user = u.id_user
+  WHERE 1=1
+";
+
+if (!empty($status_filter)) {
+  $count_query .= " AND dr.status = '" . $conn->real_escape_string($status_filter) . "'";
+}
+if (!empty($asset_filter)) {
+  $count_query .= " AND dr.id_aset = " . intval($asset_filter);
+}
+
+$count_result = $conn->query($count_query);
+$total_records = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Add LIMIT and OFFSET to main query
+$query .= " LIMIT $limit OFFSET $offset";
+
 $result = $conn->query($query);
 
 // Daftar aset untuk filter

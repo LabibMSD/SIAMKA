@@ -9,6 +9,11 @@ require_once '../../config/database.php';
 require_once '../../includes/notification_helper.php';
 checkRole(['admin']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 $selected_kategori = $_GET['kategori'] ?? '';
 
 // 🔹 Query data kategori + jumlah aset
@@ -26,6 +31,30 @@ if ($selected_kategori !== '') {
 }
 
 $query .= " GROUP BY c.id_kategori ORDER BY c.nama_kategori ASC";
+
+// Count total records for pagination
+$count_query = "SELECT COUNT(DISTINCT c.id_kategori) AS total
+                FROM categories c
+                LEFT JOIN assets a ON c.id_kategori = a.id_kategori
+                WHERE 1=1";
+
+$count_params = [];
+$count_types = '';
+
+if ($selected_kategori !== '') {
+    $count_query .= " AND c.id_kategori = ?";
+    $count_params[] = $selected_kategori;
+    $count_types .= 'i';
+}
+
+$count_stmt = $conn->prepare($count_query);
+if (!empty($count_params)) $count_stmt->bind_param($count_types, ...$count_params);
+$count_stmt->execute();
+$total_records = $count_stmt->get_result()->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Add LIMIT and OFFSET to main query
+$query .= " LIMIT $limit OFFSET $offset";
 
 $stmt = $conn->prepare($query);
 if (!empty($params)) $stmt->bind_param($types, ...$params);

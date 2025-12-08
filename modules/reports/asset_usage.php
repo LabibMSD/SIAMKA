@@ -22,6 +22,11 @@ $end_date   = $_GET['end_date'] ?? '';
 $status     = $_GET['status'] ?? '';
 $user_id    = $_GET['user_id'] ?? '';
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // 🔍 Ambil daftar user untuk filter
 $users = $conn->query("SELECT id_user, nama FROM users ORDER BY nama ASC");
 
@@ -53,6 +58,34 @@ if ($user_id) {
 }
 
 $query .= " ORDER BY l.start_date DESC";
+
+// Count total records for pagination
+$count_query = "
+    SELECT COUNT(*) AS total
+    FROM loans l
+    JOIN assets a ON l.id_aset = a.id_aset
+    LEFT JOIN users u ON l.id_user = u.id_user
+    WHERE 1=1
+";
+
+if ($start_date && $end_date) {
+    $count_query .= " AND DATE(l.start_date) BETWEEN '" . $conn->real_escape_string($start_date) . "'
+                    AND '" . $conn->real_escape_string($end_date) . "'";
+}
+if ($status) {
+    $count_query .= " AND l.status = '" . $conn->real_escape_string($status) . "'";
+}
+if ($user_id) {
+    $count_query .= " AND l.id_user = '" . $conn->real_escape_string($user_id) . "'";
+}
+
+$count_result = $conn->query($count_query);
+$total_records = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Add LIMIT and OFFSET to main query
+$query .= " LIMIT $limit OFFSET $offset";
+
 $result = $conn->query($query);
 
 // 📤 Export CSV

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 08 Des 2025 pada 14.16
+-- Waktu pembuatan: 08 Des 2025 pada 15.21
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -49,7 +49,26 @@ CREATE TABLE `assets` (
 --
 
 INSERT INTO `assets` (`id_aset`, `kode_aset`, `nama_aset`, `id_kategori`, `lokasi`, `kondisi`, `status`, `harga`, `tanggal_perolehan`, `foto`, `keterangan`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(30, 'AST-2025-0001', 'Stop kontak', 13, 'Kelas D2.11', 'baik', 'dipinjam', 25.00, '2025-12-15', 'AST_6935819eb5e7c4.48048605.jpg', 'Aman', NULL, '2025-12-07 13:31:10', '2025-12-08 13:01:33');
+(30, 'AST-2025-0001', 'Stop kontak', 13, 'Kelas D2.11', 'baik', 'dipinjam', 25.00, '2025-12-15', 'AST_6935819eb5e7c4.48048605.jpg', 'Aman', NULL, '2025-12-07 13:31:10', '2025-12-07 13:55:30'),
+(31, 'AST-2025-0002', 'Laptop', 13, 'Lab informatika', 'baik', 'tersedia', 10.00, '2025-12-10', 'AST_69358e26b7bb57.35611803.jpg', 'Baik', NULL, '2025-12-07 14:24:38', '2025-12-08 14:17:39'),
+(32, 'AST-2025-0003', 'keyboard', 13, 'Lab informatika', 'baik', 'tersedia', 10.00, '2025-12-18', 'AST_69358e8b027240.20015324.jpg', 'Sedikit Berfungsi', NULL, '2025-12-07 14:26:19', '2025-12-07 14:26:19'),
+(33, 'AST-2025-0004', 'Pensil 2B', 15, 'Ruang TU', 'baik', 'tersedia', 5.00, '2025-12-09', 'AST_69358f03b5e6a1.93177645.jpg', 'Baik', NULL, '2025-12-07 14:28:19', '2025-12-07 14:28:19'),
+(34, 'AST-2025-0005', 'Kertas Portofolio', 15, 'Ruang TU', 'baik', 'tersedia', 3.00, '2025-12-17', 'AST_69358f64e8d689.94088275.jpg', 'Baik', NULL, '2025-12-07 14:29:56', '2025-12-07 14:49:37'),
+(35, 'AST-2025-0006', 'Papan Ajar', 15, 'Lab informatika', 'baik', 'tersedia', 10.00, '2025-12-11', 'AST_69358fa7ce7302.43482463.jpg', 'Baik', NULL, '2025-12-07 14:31:03', '2025-12-07 14:31:03'),
+(36, 'AST-2025-0007', 'Meja + Kursi', 14, 'Lab informatika', 'baik', 'tersedia', 15.00, '2025-12-11', 'AST_693590273afc80.69378955.jpg', 'Aman', NULL, '2025-12-07 14:33:11', '2025-12-07 14:33:11'),
+(37, 'AST-2025-0008', 'AC', 14, 'Ruang Inventaris Kampus', 'baik', 'tersedia', 50.00, '2025-12-10', 'AST_6935908e688530.19996659.jpg', 'Baik', NULL, '2025-12-07 14:34:54', '2025-12-07 14:34:54'),
+(38, 'AST-2025-0009', 'HDMI', 14, 'Lab informatika', 'baik', 'dipinjam', 10.00, '2025-12-12', 'AST_6935915644e7d2.71776851.jpg', 'Baik', NULL, '2025-12-07 14:37:12', '2025-12-07 14:49:00'),
+(39, 'AST-2025-0010', 'Obeng', 14, 'Ruang Inventaris Kampus', 'baik', 'tersedia', 5.00, '2025-12-12', 'AST_693591adb6f4d1.96891632.jpg', 'Baik', NULL, '2025-12-07 14:39:41', '2025-12-07 14:39:41'),
+(40, 'AST-2025-0011', 'Spidol', 15, 'Ruang TU', 'baik', 'tersedia', 8.00, '2025-12-12', 'AST_693591f3e20d32.36299581.jpg', 'Baik', NULL, '2025-12-07 14:40:51', '2025-12-07 14:40:51'),
+(41, 'AST-2025-0012', 'Penghapus Papan', 15, 'Ruang TU', 'baik', 'tersedia', 5.00, '2025-12-13', 'AST_69359246879357.69758244.png', 'Baik', NULL, '2025-12-07 14:42:14', '2025-12-07 14:42:14'),
+(42, 'AST-2025-0013', 'TANGGA', 14, 'Ruang Inventaris Kampus', 'baik', 'tersedia', 10.00, '2025-12-12', 'AST_6936caeb244643.88747282.jpg', 'Baik', NULL, '2025-12-08 12:56:11', '2025-12-08 12:56:11'),
+(43, 'AST-2025-0014', 'Spiker', 13, 'Ruang TU', 'baik', 'tersedia', 5.00, '2025-12-09', 'AST_6936cb1b90ab15.68176872.jpg', 'Baik', NULL, '2025-12-08 12:56:59', '2025-12-08 12:56:59'),
+(44, 'AST-2025-0015', 'Mouse', 13, 'Lab informatika', 'baik', 'tersedia', 3.00, '2025-12-09', 'AST_6936cb776020c8.84796718.png', 'Baik', NULL, '2025-12-08 12:58:31', '2025-12-08 12:58:31'),
+(45, 'AST-2025-0016', 'Stabilo', 15, 'Ruang TU', 'baik', 'tersedia', 3.00, '2025-12-10', 'AST_6936cba4a7a751.39560809.jpg', 'Baik', NULL, '2025-12-08 12:59:16', '2025-12-08 12:59:16'),
+(46, 'AST-2025-0017', 'Hardisk', 13, 'Lab informatika', 'baik', 'tersedia', 5.00, '2025-12-09', 'AST_6936cbd6518855.79309671.jpg', 'Baik', NULL, '2025-12-08 13:00:06', '2025-12-08 13:00:06'),
+(47, 'AST-2025-0018', 'Penggaris', 15, 'Ruang TU', 'baik', 'tersedia', 2.00, '2025-12-09', 'AST_6936cc0364a357.69706669.jpg', 'Aman', NULL, '2025-12-08 13:00:51', '2025-12-08 13:00:51'),
+(48, 'AST-2025-0019', 'Komputer', 13, 'Lab informatika', 'baik', 'tersedia', 20.00, '2025-12-09', 'AST_6936cc46a2dc60.95393923.jpg', 'Baik', NULL, '2025-12-08 13:01:58', '2025-12-08 13:01:58'),
+(49, 'AST-2025-0020', 'Penghapus Buku', 15, 'Ruang TU', 'baik', 'tersedia', 2.00, '2025-12-10', 'AST_6936cc71bab255.98094577.jpg', 'Baik', NULL, '2025-12-08 13:02:41', '2025-12-08 13:02:41');
 
 -- --------------------------------------------------------
 
@@ -69,7 +88,8 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id_kategori`, `nama_kategori`, `deskripsi`) VALUES
 (13, 'Elektronik', 'Ini elektronik'),
-(14, 'Perabotan', 'Ini deskripsi untuk perabotan');
+(14, 'Perabotan', 'Ini deskripsi untuk perabotan'),
+(15, 'Alat Tulis', 'Aman');
 
 -- --------------------------------------------------------
 
@@ -91,7 +111,7 @@ CREATE TABLE `damage_reports` (
 --
 
 INSERT INTO `damage_reports` (`id_laporan`, `id_user`, `id_aset`, `tanggal_lapor`, `deskripsi`, `status`) VALUES
-(1, 19, 30, '2025-12-08', 'rusak stop kontak nya', 'diproses');
+(1, 19, 30, '2025-12-07', 'stop kontak tidak berfungsi', 'baru');
 
 -- --------------------------------------------------------
 
@@ -116,8 +136,10 @@ CREATE TABLE `loans` (
 --
 
 INSERT INTO `loans` (`id_peminjaman`, `id_user`, `id_aset`, `start_date`, `end_date`, `returned_at`, `status`, `feedback`, `created_at`) VALUES
-(1, 19, 30, '2025-12-07', '2025-12-31', '2025-12-08 19:54:12', 'returned', '', '2025-12-07 13:47:17'),
-(2, 19, 30, '2025-12-08', '2025-12-16', NULL, 'approved', '', '2025-12-08 12:55:36');
+(1, 19, 30, '2025-12-07', '2025-12-31', NULL, 'approved', '', '2025-12-07 13:47:17'),
+(2, 19, 38, '2025-12-13', '2025-12-18', NULL, 'approved', '', '2025-12-07 14:47:19'),
+(3, 19, 31, '2025-12-19', '2025-12-20', '2025-12-08 21:17:39', 'returned', 'laptop nya ngelaq parah', '2025-12-07 14:47:36'),
+(4, 19, 34, '2025-12-10', '2025-12-12', '2025-12-07 21:49:37', 'returned', '', '2025-12-07 14:47:56');
 
 -- --------------------------------------------------------
 
@@ -135,13 +157,6 @@ CREATE TABLE `maintenance_history` (
   `status_aset_setelah_perawatan` enum('baik','rusak','hilang') DEFAULT 'baik'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `maintenance_history`
---
-
-INSERT INTO `maintenance_history` (`id_history`, `id_aset`, `tanggal_perawatan`, `biaya`, `teknisi`, `deskripsi`, `status_aset_setelah_perawatan`) VALUES
-(1, 30, '2025-12-08', 0.00, 'gg', '', 'baik');
-
 -- --------------------------------------------------------
 
 --
@@ -156,13 +171,6 @@ CREATE TABLE `maintenance_schedule` (
   `keterangan` text DEFAULT NULL,
   `status` enum('terjadwal','selesai','dibatalkan') DEFAULT 'terjadwal'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `maintenance_schedule`
---
-
-INSERT INTO `maintenance_schedule` (`id_jadwal`, `id_petugas`, `id_aset`, `tanggal_jadwal`, `keterangan`, `status`) VALUES
-(1, 18, 30, '2025-12-08', '', 'selesai');
 
 -- --------------------------------------------------------
 
@@ -188,10 +196,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id_user`, `nama`, `email`, `password`, `role`, `no_telp`, `foto`, `status`, `deleted_at`) VALUES
 (17, 'BANG OGA', 'yoga@siamka.com', '$2y$10$yQG9TxpKZE4NUuFMy7IiH.0yniGIHEVBEaRX97JLDo70yS6W5lN1m', 'admin', '0000000000', '692d85a71f25b.png', 'aktif', '2025-12-02 06:54:38'),
-(18, 'PAK OGA', 'manajemen@siamka.com', '$2y$10$hdzkz/lTGdrf7om2.pFQOeajYD6F6PEDjrNvGq2fcdoh2Zoqt2d0u', 'manajemen', '081443239444', '1765113755_Manajemen.jpeg', 'aktif', NULL),
-(19, 'OGA', 'pengguna@siamka.com', '$2y$10$zJG6ldr4fPuc7dP9rBLBbOEaHuTuCie5VokXi0sY8yZYLodIz9K6C', 'pengguna', '081332482333', '1765114292_Pengguna.jpeg', 'aktif', NULL),
+(18, 'PAK OGA', 'manajemen@siamka.com', '$2y$10$hdzkz/lTGdrf7om2.pFQOeajYD6F6PEDjrNvGq2fcdoh2Zoqt2d0u', 'manajemen', '0881026489264', '1765113755_Manajemen.jpeg', 'aktif', NULL),
+(19, 'Diego Costa', 'pengguna@siamka.com', '$2y$10$zJG6ldr4fPuc7dP9rBLBbOEaHuTuCie5VokXi0sY8yZYLodIz9K6C', 'pengguna', '082131868592', '1765199148_diego.jpg', 'aktif', NULL),
 (37, 'alif', 'alif123@siamka.com', '$2y$10$8jPyQvVVWhxXwcXzKtGto.nZQvGcCVB/PKnbwCUdhLZYMLc0DHije', 'pengguna', '081332129234', '1761817564_WhatsApp Image 2023-10-10 at 21.36.29_5c935d45.jpg', 'aktif', '2025-12-02 06:49:42'),
-(46, 'MAS YOGA', 'admin@siamka.com', '$2y$10$zXxhhBiHvMLX5TbTly9GxurfN41gZsV9TM0o43Qss7Naa17zrVPgC', 'admin', '0000000000', '1765111533_Admin.jpeg', 'aktif', NULL);
+(46, 'MAS YOGA', 'admin@siamka.com', '$2y$10$zXxhhBiHvMLX5TbTly9GxurfN41gZsV9TM0o43Qss7Naa17zrVPgC', 'admin', '085236313701', '1765111533_Admin.jpeg', 'aktif', NULL);
 
 --
 -- Indexes for dumped tables
@@ -256,13 +264,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id_aset` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_aset` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT untuk tabel `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `damage_reports`
@@ -274,19 +282,19 @@ ALTER TABLE `damage_reports`
 -- AUTO_INCREMENT untuk tabel `loans`
 --
 ALTER TABLE `loans`
-  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `maintenance_history`
 --
 ALTER TABLE `maintenance_history`
-  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `maintenance_schedule`
 --
 ALTER TABLE `maintenance_schedule`
-  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
