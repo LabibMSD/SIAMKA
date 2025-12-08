@@ -10,9 +10,14 @@ require_once '../../includes/notification_helper.php';
 
 checkRole(['admin', 'manajemen']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // === Ambil Data Jadwal Maintenance ===
 $query = "
-  SELECT 
+  SELECT
     ms.id_jadwal,
     ms.tanggal_jadwal,
     ms.keterangan,
@@ -29,6 +34,23 @@ $query = "
   WHERE a.deleted_at IS NULL
   ORDER BY ms.tanggal_jadwal DESC
 ";
+
+// Count total records for pagination
+$count_query = "
+  SELECT COUNT(*) AS total
+  FROM maintenance_schedule ms
+  LEFT JOIN assets a ON ms.id_aset = a.id_aset
+  LEFT JOIN categories c ON a.id_kategori = c.id_kategori
+  LEFT JOIN users u ON ms.id_petugas = u.id_user
+  WHERE a.deleted_at IS NULL
+";
+
+$count_result = $conn->query($count_query);
+$total_records = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Add LIMIT and OFFSET to main query
+$query .= " LIMIT $limit OFFSET $offset";
 
 $result = $conn->query($query);
 $schedules = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
