@@ -9,8 +9,39 @@ require_once '../../config/database.php';
 require_once '../../includes/notification_helper.php';
 checkRole(['admin']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 $role_filter = $_GET['role'] ?? '';
 $search = $_GET['search'] ?? '';
+
+// Count total users for pagination
+$countQuery = "SELECT COUNT(*) as total FROM users WHERE deleted_at IS NULL";
+$countParams = [];
+$countTypes = '';
+
+if ($role_filter !== '') {
+    $countQuery .= " AND role = ?";
+    $countParams[] = $role_filter;
+    $countTypes .= 's';
+}
+
+if ($search !== '') {
+    $countQuery .= " AND (nama LIKE ? OR email LIKE ?)";
+    $countParams[] = "%$search%";
+    $countParams[] = "%$search%";
+    $countTypes .= 'ss';
+}
+
+$countStmt = $conn->prepare($countQuery);
+if (!empty($countParams)) {
+    $countStmt->bind_param($countTypes, ...$countParams);
+}
+$countStmt->execute();
+$total_users = $countStmt->get_result()->fetch_assoc()['total'];
+$total_pages = ceil($total_users / $limit);
 
 $query = "SELECT * FROM users WHERE deleted_at IS NULL";
 $params = [];
@@ -29,7 +60,7 @@ if ($search !== '') {
     $types .= 'ss';
 }
 
-$query .= " ORDER BY id_user DESC";
+$query .= " ORDER BY id_user DESC LIMIT $limit OFFSET $offset";
 $stmt = $conn->prepare($query);
 
 if (!empty($params)) {
@@ -140,6 +171,49 @@ include '../../includes/sidebar.php';
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pagination -->
+                <?php if ($total_pages > 1): ?>
+                    <div class="pagination">
+                        <?php
+                        // Previous button
+                        if ($page > 1) {
+                            $prev_page = $page - 1;
+                            $prev_url = "?page=$prev_page&search=" . urlencode($search) . "&role=" . urlencode($role_filter);
+                            echo "<a href='$prev_url' class='prev'>« Previous</a>";
+                        }
+
+                        // Page numbers
+                        $start_page = max(1, $page - 2);
+                        $end_page = min($total_pages, $page + 2);
+
+                        if ($start_page > 1) {
+                            $first_url = "?page=1&search=" . urlencode($search) . "&role=" . urlencode($role_filter);
+                            echo "<a href='$first_url'>1</a>";
+                            if ($start_page > 2) echo "<span class='dots'>...</span>";
+                        }
+
+                        for ($i = $start_page; $i <= $end_page; $i++) {
+                            $page_url = "?page=$i&search=" . urlencode($search) . "&role=" . urlencode($role_filter);
+                            $active_class = ($i == $page) ? 'active' : '';
+                            echo "<a href='$page_url' class='$active_class'>$i</a>";
+                        }
+
+                        if ($end_page < $total_pages) {
+                            if ($end_page < $total_pages - 1) echo "<span class='dots'>...</span>";
+                            $last_url = "?page=$total_pages&search=" . urlencode($search) . "&role=" . urlencode($role_filter);
+                            echo "<a href='$last_url'>$total_pages</a>";
+                        }
+
+                        // Next button
+                        if ($page < $total_pages) {
+                            $next_page = $page + 1;
+                            $next_url = "?page=$next_page&search=" . urlencode($search) . "&role=" . urlencode($role_filter);
+                            echo "<a href='$next_url' class='next'>Next »</a>";
+                        }
+                        ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

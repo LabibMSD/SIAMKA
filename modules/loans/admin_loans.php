@@ -10,17 +10,60 @@ require_once '../../includes/notification_helper.php';
 
 checkRole(['admin', 'manajemen']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // 🔍 Ambil filter dari query string
 $status_filter = $_GET['status'] ?? '';
 $user_filter   = $_GET['user'] ?? '';
 $tanggal_filter = $_GET['tanggal'] ?? '';
 
+// Count total loans for pagination
+$countQuery = "
+    SELECT COUNT(*) as total
+    FROM loans l
+    LEFT JOIN users u ON l.id_user = u.id_user
+    LEFT JOIN assets a ON l.id_aset = a.id_aset
+    WHERE 1=1
+";
+
+$countParams = [];
+$countTypes = '';
+
+if ($status_filter !== '') {
+    $countQuery .= " AND l.status = ? ";
+    $countParams[] = $status_filter;
+    $countTypes .= 's';
+}
+
+if ($user_filter !== '') {
+    $countQuery .= " AND u.nama_lengkap LIKE ? ";
+    $countParams[] = "%$user_filter%";
+    $countTypes .= 's';
+}
+
+if ($tanggal_filter !== '') {
+    $countQuery .= " AND DATE(l.start_date) = ? ";
+    $countParams[] = $tanggal_filter;
+    $countTypes .= 's';
+}
+
+$countStmt = $conn->prepare($countQuery);
+if (!empty($countParams)) {
+    $countStmt->bind_param($countTypes, ...$countParams);
+}
+$countStmt->execute();
+$total_loans = $countStmt->get_result()->fetch_assoc()['total'];
+$total_pages = ceil($total_loans / $limit);
+
 // 🔧 Query dasar
 $query = "
-    SELECT 
-        l.*, 
-        u.nama AS nama_user, 
-        a.nama_aset, 
+    SELECT
+        l.*,
+        u.nama AS nama_user,
+        a.nama_aset,
         a.kode_aset
     FROM loans l
     LEFT JOIN users u ON l.id_user = u.id_user
@@ -50,7 +93,7 @@ if ($tanggal_filter !== '') {
     $types .= 's';
 }
 
-$query .= " ORDER BY l.created_at DESC";
+$query .= " ORDER BY l.created_at DESC LIMIT $limit OFFSET $offset";
 
 $stmt = $conn->prepare($query);
 if (!empty($params)) {
@@ -175,6 +218,49 @@ include '../../includes/sidebar.php';
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pagination -->
+                <?php if ($total_pages > 1): ?>
+                    <div class="pagination">
+                        <?php
+                        // Previous button
+                        if ($page > 1) {
+                            $prev_page = $page - 1;
+                            $prev_url = "?page=$prev_page&status=" . urlencode($status_filter) . "&user=" . urlencode($user_filter) . "&tanggal=" . urlencode($tanggal_filter);
+                            echo "<a href='$prev_url' class='prev'>« Previous</a>";
+                        }
+
+                        // Page numbers
+                        $start_page = max(1, $page - 2);
+                        $end_page = min($total_pages, $page + 2);
+
+                        if ($start_page > 1) {
+                            $first_url = "?page=1&status=" . urlencode($status_filter) . "&user=" . urlencode($user_filter) . "&tanggal=" . urlencode($tanggal_filter);
+                            echo "<a href='$first_url'>1</a>";
+                            if ($start_page > 2) echo "<span class='dots'>...</span>";
+                        }
+
+                        for ($i = $start_page; $i <= $end_page; $i++) {
+                            $page_url = "?page=$i&status=" . urlencode($status_filter) . "&user=" . urlencode($user_filter) . "&tanggal=" . urlencode($tanggal_filter);
+                            $active_class = ($i == $page) ? 'active' : '';
+                            echo "<a href='$page_url' class='$active_class'>$i</a>";
+                        }
+
+                        if ($end_page < $total_pages) {
+                            if ($end_page < $total_pages - 1) echo "<span class='dots'>...</span>";
+                            $last_url = "?page=$total_pages&status=" . urlencode($status_filter) . "&user=" . urlencode($user_filter) . "&tanggal=" . urlencode($tanggal_filter);
+                            echo "<a href='$last_url'>$total_pages</a>";
+                        }
+
+                        // Next button
+                        if ($page < $total_pages) {
+                            $next_page = $page + 1;
+                            $next_url = "?page=$next_page&status=" . urlencode($status_filter) . "&user=" . urlencode($user_filter) . "&tanggal=" . urlencode($tanggal_filter);
+                            echo "<a href='$next_url' class='next'>Next »</a>";
+                        }
+                        ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 </main>

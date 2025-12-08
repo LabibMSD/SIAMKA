@@ -16,6 +16,11 @@ if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'manajemen') {
 // 📄 Deteksi halaman aktif
 $current_page = basename($_SERVER['PHP_SELF']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // 🧩 Filter tanggal & nama aset
 $start_date = $_GET['start_date'] ?? '';
 $end_date   = $_GET['end_date'] ?? '';
@@ -23,6 +28,27 @@ $nama_aset  = $_GET['nama_aset'] ?? '';
 
 // 🧾 Ambil semua nama aset untuk dropdown
 $aset_result = $conn->query("SELECT id_aset, nama_aset FROM assets WHERE deleted_at IS NULL ORDER BY nama_aset ASC");
+
+// Count total records for pagination
+$count_query = "
+    SELECT COUNT(DISTINCT a.id_aset) AS total
+    FROM maintenance_history m
+    JOIN assets a ON m.id_aset = a.id_aset
+    WHERE 1=1
+";
+
+if ($start_date && $end_date) {
+    $count_query .= " AND DATE(m.tanggal_selesai) BETWEEN '" . $conn->real_escape_string($start_date) . "' 
+                AND '" . $conn->real_escape_string($end_date) . "'";
+}
+
+if (!empty($nama_aset)) {
+    $count_query .= " AND a.id_aset = '" . $conn->real_escape_string($nama_aset) . "'";
+}
+
+$count_result = $conn->query($count_query);
+$total_records = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
 
 // 🔍 Query utama
 $query = "
@@ -46,7 +72,7 @@ if (!empty($nama_aset)) {
     $query .= " AND a.id_aset = '" . $conn->real_escape_string($nama_aset) . "'";
 }
 
-$query .= " GROUP BY a.id_aset ORDER BY total_biaya DESC";
+$query .= " GROUP BY a.id_aset ORDER BY total_biaya DESC LIMIT $limit OFFSET $offset";
 $result = $conn->query($query);
 
 // 📤 Export CSV
@@ -212,6 +238,49 @@ require_once '../../includes/sidebar.php';
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pagination -->
+                <?php if ($total_pages > 1): ?>
+                    <div class="pagination">
+                        <?php
+                        // Previous button
+                        if ($page > 1) {
+                            $prev_page = $page - 1;
+                            $prev_url = "?page=$prev_page&start_date=" . urlencode($start_date) . "&end_date=" . urlencode($end_date) . "&nama_aset=" . urlencode($nama_aset);
+                            echo "<a href='$prev_url' class='prev'>« Previous</a>";
+                        }
+
+                        // Page numbers
+                        $start_page = max(1, $page - 2);
+                        $end_page = min($total_pages, $page + 2);
+
+                        if ($start_page > 1) {
+                            $first_url = "?page=1&start_date=" . urlencode($start_date) . "&end_date=" . urlencode($end_date) . "&nama_aset=" . urlencode($nama_aset);
+                            echo "<a href='$first_url'>1</a>";
+                            if ($start_page > 2) echo "<span class='dots'>...</span>";
+                        }
+
+                        for ($i = $start_page; $i <= $end_page; $i++) {
+                            $page_url = "?page=$i&start_date=" . urlencode($start_date) . "&end_date=" . urlencode($end_date) . "&nama_aset=" . urlencode($nama_aset);
+                            $active_class = ($i == $page) ? 'active' : '';
+                            echo "<a href='$page_url' class='$active_class'>$i</a>";
+                        }
+
+                        if ($end_page < $total_pages) {
+                            if ($end_page < $total_pages - 1) echo "<span class='dots'>...</span>";
+                            $last_url = "?page=$total_pages&start_date=" . urlencode($start_date) . "&end_date=" . urlencode($end_date) . "&nama_aset=" . urlencode($nama_aset);
+                            echo "<a href='$last_url'>$total_pages</a>";
+                        }
+
+                        // Next button
+                        if ($page < $total_pages) {
+                            $next_page = $page + 1;
+                            $next_url = "?page=$next_page&start_date=" . urlencode($start_date) . "&end_date=" . urlencode($end_date) . "&nama_aset=" . urlencode($nama_aset);
+                            echo "<a href='$next_url' class='next'>Next »</a>";
+                        }
+                        ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
