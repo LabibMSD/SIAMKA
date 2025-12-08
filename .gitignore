@@ -1,0 +1,30 @@
+# SIAMKA - Git Ignore
+
+# Sensitive files
+config/database.php
+config/config.php
+
+# Uploads
+assets/uploads/*
+!assets/uploads/.gitkeep
+!assets/uploads/assets/.gitkeep
+!assets/uploads/damage_reports/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+error_log
+
+# Composer (if used)
+vendor/
+composer.lock

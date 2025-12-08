@@ -1,0 +1,28 @@
+# SIAMKA - Apache Configuration
+
+# Prevent directory listing
+Options -Indexes
+
+# Custom error pages
+ErrorDocument 404 /404.php
+ErrorDocument 403 /403.php
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Protect sensitive files
+<FilesMatch "\.(sql|md|json|yml|log)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# PHP settings
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 5M
+    php_value post_max_size 5M
+    php_flag display_errors Off
+</IfModule>

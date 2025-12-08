@@ -1,0 +1,361 @@
+/* ===================================== */
+/* 🌍 GLOBAL THEME & BASE STYLES         */
+/* ===================================== */
+
+/* Font dan reset dasar */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: var(--font-primary, "Inter", "Segoe UI", Tahoma, sans-serif);
+  background-color: var(--bg-light, #f8f9fa);
+  color: var(--text-dark, #1a1a1a);
+  height: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===================================== */
+/* 🎨 WARNA UTAMA - ALIGNED WITH DESIGN SYSTEM */
+/* ===================================== */
+:root {
+  /* Use modern design system colors */
+  --primary-color: var(--primary-blue, rgba(255, 193, 7, 0.6));
+  --accent-color: var(--accent-yellow, #6E6E6E);
+  --bg-light: var(--bg-light, #f8f9fa);
+  --text-dark: var(--text-dark, #1a1a1a);
+  --text-light: var(--text-light, #ffffff);
+  --shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+  --border-color: var(--border-color, #e0e7ff);
+  --success-green: var(--success-green, #10b981);
+  --danger-red: var(--danger-red, #ef4444);
+  --warning-orange: var(--warning-orange, #f97316);
+}
+
+/* ===================================== */
+/* 🧩 ELEMENT DASAR                      */
+/* ===================================== */
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: var(--accent-color);
+}
+
+/* Tombol umum - ALIGNED WITH DESIGN SYSTEM */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm, 0.5rem) var(--spacing-lg, 1rem);
+  font-size: var(--font-size-base, 1rem);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-lg, 0.5rem);
+  cursor: pointer;
+  transition: all var(--transition-base, 200ms ease-in-out);
+  text-decoration: none;
+  white-space: nowrap;
+  gap: var(--spacing-sm, 0.25rem);
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue, rgba(255, 193, 7, 0.6));
+  color: var(--text-light, #ffffff);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-blue-dark, #0d3d6e);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+  color: var(--text-light, #ffffff);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-blue, rgba(255, 193, 7, 0.6));
+  border: 2px solid var(--primary-blue, rgba(255, 193, 7, 0.6));
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-blue, rgba(255, 193, 7, 0.6));
+  color: var(--text-light, #ffffff);
+}
+
+.btn-success {
+  background-color: var(--success-green, #10b981);
+  color: var(--text-light, #ffffff);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.btn-danger {
+  background-color: var(--danger-red, #ef4444);
+  color: var(--text-light, #ffffff);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.btn-warning {
+  background-color: var(--accent-yellow, #ffc107);
+  color: var(--text-dark, #1a1a1a);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.btn-warning:hover {
+  background-color: var(--accent-yellow-dark, #e0a800);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 0.375rem 0.875rem;
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.btn-lg {
+  padding: var(--spacing-md, 0.75rem) var(--spacing-xl, 1.25rem);
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: 600;
+}
+
+/* Icon Spacing */
+.btn i {
+  font-size: 1.1em;
+}
+
+/* ===================================== */
+/* 🔔 ALERT / NOTIFIKASI - ALIGNED WITH DESIGN SYSTEM */
+/* ===================================== */
+.alert {
+  padding: var(--spacing-lg, 1rem);
+  border-radius: var(--radius-lg, 0.5rem);
+  border-left: 4px solid;
+  margin-bottom: var(--spacing-lg, 1rem);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md, 0.75rem);
+  font-weight: 500;
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.alert-success {
+  background-color: #d1fae5;
+  border-left-color: var(--success-green, #10b981);
+  color: #065f46;
+}
+
+.alert-danger {
+  background-color: #fee2e2;
+  border-left-color: var(--danger-red, #ef4444);
+  color: #7f1d1d;
+}
+
+.alert-warning {
+  background-color: #fef3c7;
+  border-left-color: var(--warning-orange, #f97316);
+  color: #78350f;
+}
+
+.alert-info {
+  background-color: #dbeafe;
+  border-left-color: var(--primary-blue, rgba(255, 193, 7, 0.6));
+  color: #0c4a6e;
+}
+
+.alert i {
+  font-size: 1.25em;
+  flex-shrink: 0;
+}
+
+/* Legacy support */
+.alert.success {
+  background-color: #d1fae5;
+  border-left-color: var(--success-green, #10b981);
+  color: #065f46;
+}
+
+.alert.error {
+  background-color: #fee2e2;
+  border-left-color: var(--danger-red, #ef4444);
+  color: #7f1d1d;
+}
+
+/* ===================================== */
+/* 🧮 FORM ELEMENTS                      */
+/* ===================================== */
+input,
+select,
+textarea {
+  font-family: inherit;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95em;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px rgba(244, 197, 66, 0.4);
+}
+
+/* ===================================== */
+/* 📊 TABLE STYLING - ALIGNED WITH DESIGN SYSTEM */
+/* ===================================== */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-xl, 1rem);
+  border: 1px solid var(--border-color, #e0e7ff);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-white, #ffffff);
+}
+
+.table thead {
+  background-color: var(--bg-light, #f8f9fa);
+  border-bottom: 2px solid var(--border-color, #e0e7ff);
+}
+
+.table th {
+  padding: var(--spacing-lg, 1rem);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-dark, #1a1a1a);
+  font-size: var(--font-size-sm, 0.875rem);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+  padding: var(--spacing-lg, 1rem);
+  border-bottom: 1px solid var(--border-color-light, #f0f4ff);
+  color: var(--text-muted, #6b7280);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.table tbody tr:hover {
+  background-color: var(--bg-light, #f8f9fa);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Legacy support */
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-white, #ffffff);
+  border-radius: var(--radius-xl, 1rem);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.08));
+  margin-top: 1rem;
+}
+
+.table-custom th {
+  background: var(--primary-blue, rgba(255, 193, 7, 0.6));
+  color: var(--accent-yellow, #ffc107);
+  text-align: left;
+  padding: var(--spacing-lg, 1rem);
+  text-transform: uppercase;
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+}
+
+.table-custom td {
+  padding: var(--spacing-lg, 1rem);
+  border-bottom: 1px solid var(--border-color-light, #f0f4ff);
+}
+
+.table-custom tr:hover {
+  background: var(--bg-light, #f8f9fa);
+}
+
+/* ===================================== */
+/* 🔢 PAGINATION                         */
+/* ===================================== */
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0 4px;
+  padding: 6px 12px;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.pagination a:hover {
+  background: var(--accent-color);
+  color: var(--primary-color);
+  border-color: var(--accent-color);
+}
+
+.pagination a.active {
+  background: var(--accent-color);
+  color: var(--primary-color);
+  pointer-events: none;
+}
+
+/* ===================================== */
+/* ⚙️ UTILITIES                         */
+/* ===================================== */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 1rem;
+}
+
+.mt-3 {
+  margin-top: 1.5rem;
+}
