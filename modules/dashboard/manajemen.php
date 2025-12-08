@@ -43,10 +43,10 @@ $totalMaintenanceCost = $conn->query("
 
 // Maintenance Cost (Current Year)
 $maintenanceCostThisYear = $conn->query("
-  SELECT COALESCE(SUM(biaya), 0) AS total 
+  SELECT COALESCE(SUM(biaya), 0) AS total
   FROM maintenance_history
   WHERE YEAR(tanggal_perawatan) = YEAR(CURDATE())
-")->fetch_assoc()['total'];
+")->fetch_assoc()['total'] ?? 0;
 
 // === Additional Statistics ===
 $asetTersedia = $conn->query("
@@ -246,7 +246,7 @@ $avgLoanDuration = $conn->query("
         </div>
         <div class="stat-card-content">
           <span class="stat-label">Nilai Total Aset</span>
-          <span class="stat-value">Rp <?= number_format($nilaiTotalAset / 1000000, 1) ?>M</span>
+          <span class="stat-value">Rp <?= number_format($nilaiTotalAset, 0, ',', '.') ?></span>
           <span class="stat-footer">Total investasi aset</span>
         </div>
       </div>
@@ -270,8 +270,8 @@ $avgLoanDuration = $conn->query("
         </div>
         <div class="stat-card-content">
           <span class="stat-label">Total Maintenance</span>
-          <span class="stat-value">Rp <?= number_format($totalMaintenanceCost / 1000000, 1) ?>M</span>
-          <span class="stat-footer">Tahun ini: Rp <?= number_format($maintenanceCostThisYear / 1000000, 1) ?>M</span>
+          <span class="stat-value">Rp <?= number_format($totalMaintenanceCost, 0, ',', '.') ?></span>
+          <span class="stat-footer">Tahun ini: Rp <?= number_format($maintenanceCostThisYear, 0, ',', '.') ?></span>
         </div>
       </div>
     </div>
@@ -457,7 +457,7 @@ $avgLoanDuration = $conn->query("
                   <tr>
                     <td><?= htmlspecialchars($kat['nama_kategori']) ?></td>
                     <td class="text-center"><span class="badge badge-info"><?= $kat['total'] ?></span></td>
-                    <td class="text-end">Rp <?= number_format($kat['total_nilai'] / 1000000, 1) ?>M</td>
+                    <td class="text-end">Rp <?= number_format($kat['total_nilai'], 0, ',', '.') ?></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
@@ -490,7 +490,7 @@ $avgLoanDuration = $conn->query("
                   <tr>
                     <td><?= htmlspecialchars($age['umur_kategori']) ?></td>
                     <td class="text-center"><span class="badge badge-info"><?= $age['total'] ?></span></td>
-                    <td class="text-end">Rp <?= number_format($age['total_nilai'] / 1000000, 1) ?>M</td>
+                    <td class="text-end">Rp <?= number_format($age['total_nilai'], 0, ',', '.') ?></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
@@ -526,8 +526,8 @@ $avgLoanDuration = $conn->query("
           </div>
           <div class="insight-item">
             <strong>Maintenance Cost:</strong>
-            Total biaya maintenance mencapai Rp <?= number_format($totalMaintenanceCost) ?>.
-            Tahun ini sudah dikeluarkan Rp <?= number_format($maintenanceCostThisYear) ?>.
+            Total biaya maintenance mencapai Rp <?= number_format($totalMaintenanceCost, 0, ',', '.') ?>.
+            Tahun ini sudah dikeluarkan Rp <?= number_format($maintenanceCostThisYear, 0, ',', '.') ?>.
           </div>
           <div class="insight-item">
             <strong>Asset Condition:</strong>
