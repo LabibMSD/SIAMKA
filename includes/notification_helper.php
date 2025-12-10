@@ -58,29 +58,31 @@ if (!function_exists('display_notification')) {
                  role='alert'
                  style='
                    position: fixed;
-                   top: 10%;
-                   left: 50%;
-                   transform: translate(-50%, -50%);
-                   min-width: 300px;
-                   text-align: center;
-                   z-index: 9999;
-                   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                   border-radius: 10px;
-                   font-size: 16px;
+                   bottom: 20px;
+                   right: 20px;
+                   min-width: 240px;
+                   max-width: 340px;
+                   text-align: left;
+                   z-index: 10500;
+                   box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+                   border-radius: 8px;
+                   font-size: 14px;
+                   padding: 10px 14px;
                  '>
                 {$message}
-                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                <button type='button' class='btn-close' data-bs-dismiss='alert' style='margin-left:12px;'></button>
             </div>
 
             <script>
             setTimeout(() => {
                 const alertBox = document.getElementById('floating-alert');
                 if (alertBox) {
-                    alertBox.style.transition = 'opacity 0.5s ease';
+                    alertBox.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
                     alertBox.style.opacity = '0';
-                    setTimeout(() => alertBox.remove(), 500);
+                    alertBox.style.transform = 'translateY(10px)';
+                    setTimeout(() => alertBox.remove(), 400);
                 }
-            }, 2000);
+            }, 2500);
             </script>
             ";
         }
