@@ -125,12 +125,12 @@
                           <button class="btn btn-sm btn-outline-secondary" disabled>Menunggu Persetujuan</button>
 
                         <?php elseif ($status_display === 'approved'): ?>
-                          <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#returnModal" data-id="<?php echo htmlspecialchars($row['id_peminjaman']); ?>">
+                          <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#returnModal" data-id="<?php echo htmlspecialchars($row['id_peminjaman']); ?>" data-asset-id="<?php echo htmlspecialchars($row['id_aset']); ?>">
                             <i class="fa-solid fa-undo"></i> Kembalikan
                           </button>
 
                         <?php elseif ($status_display === 'overdue'): ?>
-                          <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#returnModal" data-id="<?php echo htmlspecialchars($row['id_peminjaman']); ?>">
+                          <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#returnModal" data-id="<?php echo htmlspecialchars($row['id_peminjaman']); ?>" data-asset-id="<?php echo htmlspecialchars($row['id_aset']); ?>">
                             <i class="fa-solid fa-undo"></i> Kembalikan
                           </button>
 
@@ -168,15 +168,17 @@
         <form id="returnForm" method="POST" action="return_asset.php">
           <div class="modal-body">
             <p>Apakah Anda yakin ingin mengembalikan aset ini?</p>
-            <div class="mb-3">
-              <label for="feedback" class="form-label">Feedback (Opsional)</label>
-              <textarea class="form-control" id="feedback" name="feedback" rows="3" placeholder="Berikan feedback tentang kondisi aset yang dipinjam..."></textarea>
-            </div>
             <input type="hidden" id="id_peminjaman" name="id_peminjaman" value="">
+            <input type="hidden" id="id_aset" name="id_aset" value="">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-success">Kembalikan Aset</button>
+            <button type="button" class="btn btn-danger" id="damageReportBtn">
+              <i class="fa-solid fa-exclamation-triangle"></i> Lapor Kerusakan
+            </button>
+            <button type="submit" class="btn btn-success">
+              <i class="fa-solid fa-check"></i> Lanjutkan
+            </button>
           </div>
         </form>
       </div>
@@ -191,6 +193,25 @@
       const idPeminjaman = button.getAttribute('data-id');
       const idInput = document.getElementById('id_peminjaman');
       idInput.value = idPeminjaman;
+
+      // Get the asset ID from the table row
+      const row = button.closest('tr');
+      const cellContent = row.querySelector('td:nth-child(2)').innerText; // Kode Aset
+      const assetKode = cellContent;
+      
+      // Find the actual id_aset from the modal data
+      // We'll get it from the table data attribute
+      const idAset = button.getAttribute('data-asset-id') || '';
+      document.getElementById('id_aset').value = idAset;
+    });
+
+    // Handle "Lapor Kerusakan" button click
+    document.getElementById('damageReportBtn').addEventListener('click', function() {
+      const idAset = document.getElementById('id_aset').value;
+      if (idAset) {
+        // Redirect to damage report page with asset pre-filled
+        window.location.href = '../damage/report.php?id_aset=' + encodeURIComponent(idAset);
+      }
     });
   </script>
 

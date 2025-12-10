@@ -12,6 +12,9 @@ checkRole(['pengguna', 'admin', 'manajemen']);
 
 $id_user = $_SESSION['id_user'];
 
+// Ambil id_aset dari URL jika ada
+$id_aset_preset = isset($_GET['id_aset']) ? (int)$_GET['id_aset'] : null;
+
 // Jika form dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id_aset = $_POST['id_aset'] ?? '';
@@ -81,7 +84,7 @@ include '../../includes/sidebar.php';
                 if ($result->num_rows > 0):
                   while ($row = $result->fetch_assoc()):
                 ?>
-                    <option value="<?= $row['id_aset'] ?>">
+                    <option value="<?= $row['id_aset'] ?>" <?= ($id_aset_preset === $row['id_aset']) ? 'selected' : '' ?>>
                       <?= htmlspecialchars($row['nama_aset']) ?> (<?= htmlspecialchars($row['kode_aset']) ?>)
                     </option>
                   <?php
