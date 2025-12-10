@@ -14,15 +14,39 @@ require_once '../../includes/sidebar.php';
 
 checkRole(['pengguna']);
 
+// Pagination
+$limit = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 // 🔎 Ambil filter kategori (opsional)
 $kategori = isset($_GET['kategori']) ? trim($_GET['kategori']) : '';
 
-// 🔧 Query aset tersedia (kecuali yang hilang)
-$query = "
-    SELECT a.*, k.nama_kategori 
+// 🔧 Base query untuk count
+$countQuery = "
+    SELECT COUNT(*) AS total
     FROM assets a
     LEFT JOIN categories k ON a.id_kategori = k.id_kategori
-    WHERE a.status = 'Tersedia' 
+    WHERE a.status = 'Tersedia'
+      AND a.kondisi != 'Hilang'
+      AND a.deleted_at IS NULL
+";
+
+if (!empty($kategori)) {
+    $countQuery .= " AND a.id_kategori = " . intval($kategori);
+}
+
+// Hitung total aset
+$totalResult = mysqli_query($conn, $countQuery);
+$total_assets = mysqli_fetch_assoc($totalResult)['total'];
+$total_pages = ceil($total_assets / $limit);
+
+// 🔧 Query aset tersedia dengan pagination
+$query = "
+    SELECT a.*, k.nama_kategori
+    FROM assets a
+    LEFT JOIN categories k ON a.id_kategori = k.id_kategori
+    WHERE a.status = 'Tersedia'
       AND a.kondisi != 'Hilang'
       AND a.deleted_at IS NULL
 ";
@@ -31,7 +55,7 @@ if (!empty($kategori)) {
     $query .= " AND a.id_kategori = " . intval($kategori);
 }
 
-$query .= " ORDER BY a.nama_aset ASC";
+$query .= " ORDER BY a.nama_aset ASC LIMIT $limit OFFSET $offset";
 
 // Jalankan query
 $result = mysqli_query($conn, $query);
@@ -111,6 +135,49 @@ $kategori_query = mysqli_query($conn, "SELECT id_kategori, nama_kategori FROM ca
                     <div class="empty-state">
                         <i class="fa-solid fa-inbox"></i>
                         <p>Tidak ada aset yang tersedia untuk dipinjam</p>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Pagination -->
+                <?php if ($total_pages > 1): ?>
+                    <div class="pagination">
+                        <?php
+                        // Previous button
+                        if ($page > 1) {
+                            $prev_page = $page - 1;
+                            $prev_url = "?page=$prev_page&kategori=" . urlencode($kategori);
+                            echo "<a href='$prev_url' class='prev'>« Previous</a>";
+                        }
+
+                        // Page numbers
+                        $start_page = max(1, $page - 2);
+                        $end_page = min($total_pages, $page + 2);
+
+                        if ($start_page > 1) {
+                            $first_url = "?page=1&kategori=" . urlencode($kategori);
+                            echo "<a href='$first_url'>1</a>";
+                            if ($start_page > 2) echo "<span class='dots'>...</span>";
+                        }
+
+                        for ($i = $start_page; $i <= $end_page; $i++) {
+                            $page_url = "?page=$i&kategori=" . urlencode($kategori);
+                            $active_class = ($i == $page) ? 'active' : '';
+                            echo "<a href='$page_url' class='$active_class'>$i</a>";
+                        }
+
+                        if ($end_page < $total_pages) {
+                            if ($end_page < $total_pages - 1) echo "<span class='dots'>...</span>";
+                            $last_url = "?page=$total_pages&kategori=" . urlencode($kategori);
+                            echo "<a href='$last_url'>$total_pages</a>";
+                        }
+
+                        // Next button
+                        if ($page < $total_pages) {
+                            $next_page = $page + 1;
+                            $next_url = "?page=$next_page&kategori=" . urlencode($kategori);
+                            echo "<a href='$next_url' class='next'>Next »</a>";
+                        }
+                        ?>
                     </div>
                 <?php endif; ?>
             </div>
