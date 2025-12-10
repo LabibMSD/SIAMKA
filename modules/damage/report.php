@@ -30,7 +30,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("iis", $id_user, $id_aset, $deskripsi);
 
     if ($stmt->execute()) {
-      set_notification("Laporan kerusakan berhasil dikirim.", "success");
+      // Setelah laporan kerusakan tersimpan, otomatis tandai pinjaman terkait sebagai returned
+      // Cari pinjaman aktif milik user untuk aset ini
+      $loanStmt = $conn->prepare("SELECT id_peminjaman FROM loans WHERE id_user = ? AND id_aset = ? AND status IN ('approved','overdue') LIMIT 1");
+      if ($loanStmt) {
+        $loanStmt->bind_param('ii', $id_user, $id_aset);
+        $loanStmt->execute();
+        $loanRes = $loanStmt->get_result();
+        if ($loanRow = $loanRes->fetch_assoc()) {
+          $id_peminjaman = $loanRow['id_peminjaman'];
+
+          // Update loan status menjadi returned
+          $updLoan = $conn->prepare("UPDATE loans SET status = 'returned', returned_at = NOW() WHERE id_peminjaman = ? AND id_user = ?");
+          if ($updLoan) {
+            $updLoan->bind_param('ii', $id_peminjaman, $id_user);
+            $updLoan->execute();
+            $updLoan->close();
+          }
+
+          // Update status aset menjadi tersedia (atau atur sesuai kebijakan)
+          $updAsset = $conn->prepare("UPDATE assets SET status = 'tersedia' WHERE id_aset = ?");
+          if ($updAsset) {
+            $updAsset->bind_param('i', $id_aset);
+            $updAsset->execute();
+            $updAsset->close();
+          }
+        }
+        $loanStmt->close();
+      }
+
+      set_notification("Laporan kerusakan berhasil dikirim dan aset otomatis dikembalikan.", "success");
       header("Location: my_reports.php");
       exit;
     } else {

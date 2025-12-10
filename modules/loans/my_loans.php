@@ -198,7 +198,7 @@
       const row = button.closest('tr');
       const cellContent = row.querySelector('td:nth-child(2)').innerText; // Kode Aset
       const assetKode = cellContent;
-      
+
       // Find the actual id_aset from the modal data
       // We'll get it from the table data attribute
       const idAset = button.getAttribute('data-asset-id') || '';
